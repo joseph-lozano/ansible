@@ -67,5 +67,6 @@
     state: present
     
 - name: Install programming languages
+  become_user: "{{ username }}"
   ansible.builtin.shell:
     cmd: mise install
