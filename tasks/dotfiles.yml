@@ -34,16 +34,26 @@
     dest: "/home/{{ username }}/.zshrc"
     state: link
 
+- name: Backup existing .config if it exists
+  ansible.builtin.command:
+    cmd: mv "/home/{{ username }}/.config" "/home/{{ username }}/.config.backup"
+  when: config.stat.exists
+
+- name: Create symlink for .config
+  ansible.builtin.file:
+    src: "/home/{{ username }}/.dotfiles/.config"
+    dest: "/home/{{ username }}/.config"
+    state: link
 
 - name: Check if .gitconfig exists
   ansible.builtin.stat:
     path: "/home/{{ username }}/.gitconfig"
-  register: zshrc_stat
+  register: gitconfig_stat
 
 - name: Backup existing .gitconfig if it exists
   ansible.builtin.command:
     cmd: mv "/home/{{ username }}/.gitconfig" "/home/{{ username }}/.gitconfig.backup"
-  when: zshrc_stat.stat.exists
+  when: gitconfig_stat.stat.exists
 
 - name: Create symlink for .gitconfig
   ansible.builtin.file:
@@ -54,12 +64,12 @@
 - name: Check if .p10k.zsh exists
   ansible.builtin.stat:
     path: "/home/{{ username }}/.p10k.zsh"
-  register: zshrc_stat
+  register: p10k_stat
 
 - name: Backup existing .p10k.zsh if it exists
   ansible.builtin.command:
     cmd: mv "/home/{{ username }}/.p10k.zsh" "/home/{{ username }}/.p10k.zsh.backup"
-  when: zshrc_stat.stat.exists
+  when: p10k_stat.stat.exists
 
 - name: Create symlink for .p10k.zsh
   ansible.builtin.file:
