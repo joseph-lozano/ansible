@@ -91,7 +91,12 @@
   become_user: "{{ username }}"
   ansible.builtin.shell:
     cmd: mise install --yes
-    
+
+- name: mise activate
+  become_user: "{{ username }}"
+  ansible.builtin.shell:
+    cmd: eval "$(mise activate zsh)"
+  
 - name: Install phx_new
   become_user: "{{ username }}"
   ansible.builtin.shell:
