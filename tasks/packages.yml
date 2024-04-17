@@ -96,4 +96,3 @@
   become_user: "{{ username }}"
   ansible.builtin.shell:
     cmd: mix archive.install hex phx_new --force
-    shell: zsh
