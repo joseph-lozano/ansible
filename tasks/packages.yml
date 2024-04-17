@@ -1,0 +1,67 @@
+
+
+- name: Create directory for APT keyrings
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Add the Charm GPG key
+  ansible.builtin.apt_key:
+    url: https://repo.charm.sh/apt/gpg.key
+    keyring: /etc/apt/keyrings/charm.gpg
+
+- name: Add Charm repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *"
+    filename: charm
+    state: present
+
+- name: Add the GPG key for the mise repository
+  ansible.builtin.apt_key:
+    url: https://mise.jdx.dev/gpg-key.pub 
+    keyring: /etc/apt/keyrings/mise-archive-keyring.gpg
+
+- name: Add mise repository
+  ansible.builtin.apt_repository:
+    repo: 'deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg arch=amd64] https://mise.jdx.dev/deb stable main'
+    filename: mise
+    state: present
+
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Download delta.deb
+  ansible.builtin.get_url:
+    url: https://github.com/dandavison/delta/releases/download/0.17.0/git-delta-musl_0.17.0_amd64.deb
+    dest: /tmp/delta.deb
+    mode: '0644'
+
+- name: Install delta.deb
+  ansible.builtin.apt:
+    deb: /tmp/delta.deb
+
+- name: Install required packages
+  become: yes
+  ansible.builtin.apt:
+    name:
+      - curl
+      - gh
+      - git
+      - glow
+      - gpg
+      - htop
+      - jq
+      - less
+      - mise
+      - neofetch
+      - neovim
+      - pre-commit
+      - tree
+      - vim
+      - wget
+      - zoxide
+      - zsh
+    state: present

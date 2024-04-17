@@ -1,0 +1,22 @@
+- name: Install Zsh
+  ansible.builtin.package:
+    name: zsh
+    state: present
+
+- name: Set Zsh as the default shell for the user
+  ansible.builtin.user:
+    name: "{{ username }}"
+    shell: /bin/zsh
+    append: no
+
+- name: Install git
+  ansible.builtin.package:
+    name: git
+    state: present
+
+- name: Install Oh My Zsh
+  become_user: "{{ username }}"
+  ansible.builtin.shell:
+    cmd: sh -c "$(wget -O- https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    creates: "/home/{{ username }}/.oh-my-zsh"
+    
