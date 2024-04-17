@@ -42,7 +42,7 @@
 - name: Backup existing .config if it exists
   ansible.builtin.command:
     cmd: mv "/home/{{ username }}/.config" "/home/{{ username }}/.config.backup"
-  when: config.stat.exists
+  when: config_stat.stat.exists
 
 - name: Create symlink for .config
   ansible.builtin.file:
