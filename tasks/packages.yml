@@ -91,8 +91,3 @@
   become_user: "{{ username }}"
   ansible.builtin.shell:
     cmd: mise install --yes
-  
-- name: Install phx_new
-  become_user: "{{ username }}"
-  ansible.builtin.shell:
-    cmd: mix archive.install hex phx_new --force
