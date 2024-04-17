@@ -33,6 +33,11 @@
     src: "/home/{{ username }}/.dotfiles/.zshrc"
     dest: "/home/{{ username }}/.zshrc"
     state: link
+    
+- name: Check if .config exists
+  ansible.builtin.stat:
+    path: "/home/{{ username }}/.config"
+  register: config_stat
 
 - name: Backup existing .config if it exists
   ansible.builtin.command:
